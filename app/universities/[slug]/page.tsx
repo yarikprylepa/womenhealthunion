@@ -20,7 +20,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
     <main className="min-h-screen bg-[#fffaf8] text-[#2c1c2b]">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <Link href="/" className="text-lg font-bold tracking-tight">
-          Women’s Health Union
+          WHU
         </Link>
 
         <Link
