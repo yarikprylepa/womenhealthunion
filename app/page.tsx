@@ -1,454 +1,341 @@
 "use client";
 
-import Link from "next/link";
-import {
-  ArrowRight,
-  AtSign,
-  HeartPulse,
-  Mail,
-  MapPin,
-  Menu,
-  Users,
-} from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { Mail, AtSign, Camera, X } from "lucide-react";
 
+const StudentChapterMap = dynamic(() => import("./components/StudentChapterMap"), { ssr: false });
+
+// University of Reading removed
 const chapters = [
-  {
-    university: "University of Reading",
-    city: "Reading",
-    status: "Active",
-    initials: "UR",
-  },
-  {
-    university: "University of Oxford",
-    city: "Oxford",
-    status: "Active",
-    initials: "UO",
-  },
-  {
-    university: "University of Bristol",
-    city: "Bristol",
-    status: "Launching soon",
-    initials: "UB",
-  },
+  { university: "Queen Mary University of London", city: "London", active: true, logo: "/logos/qmullogo.png", lat: 51.5241, lng: -0.0404 },
+  { university: "University of Sheffield", city: "Sheffield", active: true, logo: "/logos/sheflogo.png", lat: 53.3811, lng: -1.4701 },
 ];
 
-const partners = [
-  "Student Unions",
-  "Health Charities",
-  "Education Partners",
-  "Community Organisations",
+// Partners — real logos + placeholders, duplicated for seamless marquee
+const partnersBase = [
+  { name: "Bobbi", logo: "/logos/bobbilogo.png", href: "https://www.instagram.com/wearebobbi/" },
+  { name: "Partner 2", logo: null, href: "#" },
+  { name: "Partner 3", logo: null, href: "#" },
+  { name: "Partner 4", logo: null, href: "#" },
 ];
 
 export default function Home() {
+  const [selectedChapter, setSelectedChapter] = useState<any>(null);
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
+
+  // Smooth-scroll helper for nav links
+  const scrollTo = useCallback((id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  // Duplicate for seamless marquee loop
+  const marqueeItems = [...partnersBase, ...partnersBase];
+
   return (
-    <main className="min-h-screen scroll-smooth bg-[#fff8fb] text-[#291522]">
-      <header className="sticky top-0 z-50 border-b border-[#ecdce5] bg-[#fff8fb]/90 backdrop-blur">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <a href="#home" className="flex items-center gap-2 font-bold tracking-tight">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c21875] text-white">
-              W
-            </span>
-            WHU
-          </a>
+    <main className="min-h-screen bg-[#F1EEF4] text-[#4A4045] font-sans selection:bg-[#E786B6] selection:text-white pb-24">
 
-          <div className="hidden items-center gap-6 text-sm font-medium md:flex">
-            <a href="#chapters" className="transition hover:text-[#c21875]">
-              Chapters
-            </a>
-            <a href="#about" className="transition hover:text-[#c21875]">
-              About
-            </a>
-            <a href="#partners" className="transition hover:text-[#c21875]">
-              Partners
-            </a>
-            <a href="#contact" className="transition hover:text-[#c21875]">
-              Contact
-            </a>
-          </div>
-
-          <a
-            href="#start-a-chapter"
-            className="hidden rounded-full bg-[#c21875] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#8e1556] sm:inline-flex"
-          >
-            Start a chapter
-          </a>
-
-          <button
-            type="button"
-            aria-label="Open navigation menu"
-            className="rounded-full p-2 text-[#291522] md:hidden"
-          >
-            <Menu size={22} />
-          </button>
-        </nav>
-      </header>
-
-      <section
-        id="home"
-        className="scroll-mt-24 mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:items-center md:py-28"
-      >
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#c21875]">
-            A national student network
-          </p>
-
-          <h1 className="mt-5 max-w-xl text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
-            Better women’s health starts on campus.
-          </h1>
-
-          <p className="mt-7 max-w-lg text-lg leading-8 text-[#75616d]">
-            Women’s Health Union connects students, university societies and
-            partners to build more informed, supportive and inclusive campuses.
-          </p>
-
-          <div className="mt-9 flex flex-wrap gap-4">
-            <a
-              href="#chapters"
-              className="inline-flex items-center gap-2 rounded-full bg-[#c21875] px-6 py-3 font-semibold text-white transition hover:bg-[#8e1556]"
-            >
-              Find your chapter
-              <ArrowRight size={18} />
-            </a>
-
-            <a
-              href="#start-a-chapter"
-              className="rounded-full border border-[#c21875] px-6 py-3 font-semibold text-[#8e1556] transition hover:bg-[#f8e7f0]"
-            >
-              Start a chapter
-            </a>
-          </div>
+      {/* Navigation - Clay Style */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl z-50 rounded-[2rem] bg-[#F1EEF4] px-8 py-4 flex justify-between items-center shadow-[8px_8px_16px_#d9d6db,-8px_-8px_16px_#ffffff,inset_2px_2px_4px_rgba(255,255,255,0.7),inset_-2px_-2px_4px_rgba(0,0,0,0.05)]">
+        <div className="font-extrabold text-2xl tracking-tighter text-[#D45995]">WHU</div>
+        <div className="hidden md:flex gap-8 font-bold text-sm tracking-wide text-[#7C6E76]">
+          <a href="#chapters" onClick={scrollTo("chapters")} className="hover:text-[#D45995] transition-colors cursor-pointer">Chapters</a>
+          <a href="#partners" onClick={scrollTo("partners")} className="hover:text-[#D45995] transition-colors cursor-pointer">Partners</a>
+          <a href="#contact" onClick={scrollTo("contact")} className="hover:text-[#D45995] transition-colors cursor-pointer">Contact</a>
         </div>
+      </nav>
 
-        <div className="relative overflow-hidden rounded-[2rem] bg-[#f8e7f0] p-8 md:p-12">
-          <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#e95a9e]/30" />
-          <div className="absolute -bottom-16 -left-12 h-52 w-52 rounded-full bg-[#c21875]/20" />
+      {/* Section 1: Hero - Sticky Scroll */}
+      <section className="w-full bg-gradient-to-b from-[#D45995] from-75% to-[#F1EEF4] relative">
+        <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row px-8">
 
-          <div className="relative rounded-3xl bg-white p-7 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#c21875]">
-              Student-led. Nationwide.
-            </p>
-
-            <div className="mt-7 space-y-5">
-              <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f8e7f0] text-[#c21875]">
-                  <MapPin size={21} />
-                </span>
-                <div>
-                  <p className="font-semibold">Find a local community</p>
-                  <p className="text-sm text-[#75616d]">
-                    Discover chapters at universities near you.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f8e7f0] text-[#c21875]">
-                  <Users size={21} />
-                </span>
-                <div>
-                  <p className="font-semibold">Meet people who care</p>
-                  <p className="text-sm text-[#75616d]">
-                    Join student-led conversations, events and campaigns.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f8e7f0] text-[#c21875]">
-                  <HeartPulse size={21} />
-                </span>
-                <div>
-                  <p className="font-semibold">Create meaningful change</p>
-                  <p className="text-sm text-[#75616d]">
-                    Help improve awareness and support on campus.
-                  </p>
-                </div>
-              </div>
+          {/* Left side: Sticky Logo & Motto */}
+          <div className="md:w-1/2 h-[50vh] md:h-screen sticky top-0 flex flex-col items-center justify-center z-10 pt-20 md:pt-0">
+            <div className="flex flex-col items-center justify-center text-center">
+              <h1 className="font-extrabold text-[7rem] md:text-[12rem] leading-[0.8] tracking-tighter drop-shadow-[4px_6px_8px_rgba(0,0,0,0.15)] text-[#F1EEF4]">
+                WHU
+              </h1>
+              <h2 className="font-bold text-xl md:text-3xl tracking-wide opacity-95 text-[#D45995] bg-[#F1EEF4] px-6 py-3 rounded-2xl shadow-[inset_3px_3px_6px_rgba(255,255,255,0.8),inset_-3px_-3px_6px_rgba(0,0,0,0.1)] mt-4">
+                Women's Health Union
+              </h2>
             </div>
           </div>
+
+          {/* Right side: Scrolling Stickers */}
+          <div className="md:w-1/2 flex flex-col items-center justify-center pt-56 md:pt-64 pb-[30vh] space-y-[60vh] relative z-20">
+
+            {/* Sticker 1: 5% Stat */}
+            <div className="w-full max-w-md mx-auto bg-[#F1EEF4] text-[#4A4045] rounded-[2.5rem] p-8 md:p-12 shadow-[12px_12px_24px_rgba(0,0,0,0.12),-12px_-12px_24px_rgba(255,255,255,0.25),inset_6px_6px_12px_rgba(255,255,255,0.9),inset_-6px_-6px_12px_rgba(0,0,0,0.05)] transform rotate-2">
+              <h3 className="font-bold text-2xl md:text-4xl leading-snug">
+                <span className="font-extrabold text-3xl md:text-5xl block mb-4 text-[#D45995]">Less than 5%</span>
+                <span className="text-[#7C6E76]">of the UK have adequate access to women's health resources on campus.</span>
+              </h3>
+            </div>
+
+            {/* Sticker 2: About Info */}
+            <div className="w-full max-w-md mx-auto bg-[#F1EEF4] text-[#4A4045] rounded-[2.5rem] p-8 md:p-12 shadow-[12px_12px_24px_rgba(0,0,0,0.12),-12px_-12px_24px_rgba(255,255,255,0.25),inset_6px_6px_12px_rgba(255,255,255,0.9),inset_-6px_-6px_12px_rgba(0,0,0,0.05)] transform -rotate-3">
+              <h3 className="font-extrabold text-3xl md:text-5xl leading-snug mb-4 text-[#D45995]">
+                About Us
+              </h3>
+              <p className="text-[#7C6E76] text-lg md:text-xl font-bold leading-relaxed">
+                We are building a nationwide network of students advocating for better health resources, education, and community support at every single university.
+              </p>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
-      <section id="about" className="scroll-mt-24 border-y border-[#ecdce5] bg-white">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#c21875]">
-            How it works
-          </p>
+      <div className="max-w-7xl mx-auto px-6 space-y-16 -mt-8 [&>section]:scroll-mt-28 [&>div]:scroll-mt-28">
 
-          <h2 className="mt-4 max-w-2xl text-4xl font-bold tracking-tight md:text-5xl">
-            A simple route from curiosity to community.
-          </h2>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <article className="rounded-3xl border border-[#f0dce6] bg-[#fff8fb] p-7">
-              <p className="text-5xl font-bold text-[#c21875]">01</p>
-              <h3 className="mt-7 text-xl font-bold">Find your university</h3>
-              <p className="mt-3 leading-7 text-[#75616d]">
-                Browse chapters across the country and see whether there is a
-                community at your university.
-              </p>
-            </article>
-
-            <article className="rounded-3xl border border-[#f0dce6] bg-[#fff8fb] p-7">
-              <p className="text-5xl font-bold text-[#c21875]">02</p>
-              <h3 className="mt-7 text-xl font-bold">Meet your community</h3>
-              <p className="mt-3 leading-7 text-[#75616d]">
-                Discover events, conversations, campaigns and people shaping
-                better health experiences on campus.
-              </p>
-            </article>
-
-            <article className="rounded-3xl border border-[#f0dce6] bg-[#fff8fb] p-7">
-              <p className="text-5xl font-bold text-[#c21875]">03</p>
-              <h3 className="mt-7 text-xl font-bold">Help create change</h3>
-              <p className="mt-3 leading-7 text-[#75616d]">
-                Join an existing chapter, volunteer, partner with us or bring
-                Women’s Health Union to your university.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="chapters" className="scroll-mt-24 mx-auto max-w-6xl px-6 py-20">
-        <div className="flex flex-wrap items-end justify-between gap-5">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#c21875]">
-              Student chapters
-            </p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-              Find your local community.
-            </h2>
-          </div>
-
-          <Link
-            href="/universities"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#8e1556] hover:text-[#c21875]"
-          >
-            View all universities
-            <ArrowRight size={17} />
-          </Link>
-        </div>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {chapters.map((chapter) => (
-            <article
-              key={chapter.university}
-              className="rounded-3xl border border-[#f0dce6] bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f8e7f0] font-bold text-[#c21875]">
-                  {chapter.initials}
-                </span>
-
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    chapter.status === "Active"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "bg-amber-50 text-amber-700"
-                  }`}
+        {/* Section 2: Student Chapters */}
+        <section id="chapters" className="scroll-mt-28 rounded-[3rem] p-8 md:p-16 bg-[#F1EEF4] shadow-[12px_12px_24px_#d9d6db,-12px_-12px_24px_#ffffff,inset_6px_6px_12px_rgba(255,255,255,0.7),inset_-6px_-6px_12px_rgba(0,0,0,0.05)]">
+          <header className="flex flex-col md:flex-row justify-between items-center mb-16 gap-8">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <h2 className="font-extrabold text-5xl md:text-6xl text-[#4A4045]">
+                Student Chapters
+              </h2>
+              {/* Toggle Switch */}
+              <div className="flex items-center bg-[#F1EEF4] rounded-full p-1 shadow-[inset_3px_3px_6px_#d9d6db,inset_-3px_-3px_6px_#ffffff]">
+                <button
+                  onClick={() => setViewMode("list")}
+                  aria-pressed={viewMode === "list"}
+                  className={`px-6 py-2 rounded-full font-bold transition-all ${viewMode === "list" ? 'bg-[#D45995] text-white shadow-[4px_4px_8px_#d9d6db,-4px_-4px_8px_#ffffff]' : 'text-[#7C6E76] hover:bg-[#e8e4e9]'}`}
                 >
-                  {chapter.status}
-                </span>
+                  List
+                </button>
+                <button
+                  onClick={() => setViewMode("map")}
+                  aria-pressed={viewMode === "map"}
+                  className={`px-6 py-2 rounded-full font-bold transition-all ${viewMode === "map" ? 'bg-[#D45995] text-white shadow-[4px_4px_8px_#d9d6db,-4px_-4px_8px_#ffffff]' : 'text-[#7C6E76] hover:bg-[#e8e4e9]'}`}
+                >
+                  Map
+                </button>
               </div>
+            </div>
+            <div className="flex gap-4">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="w-8 h-8 rounded-full bg-[#E786B6] shadow-[inset_2px_2px_4px_rgba(255,255,255,0.5),inset_-2px_-2px_4px_rgba(0,0,0,0.1)]" />
+              ))}
+            </div>
+          </header>
 
-              <h3 className="mt-7 text-xl font-bold">{chapter.university}</h3>
+          {viewMode === "list" ? (
+            <div className="flex flex-col md:flex-row gap-16 items-center justify-center">
+              {chapters.map((chapter, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedChapter(chapter)}
+                  className="flex flex-col items-center gap-6 group cursor-pointer focus:outline-none"
+                  aria-label={`Open ${chapter.university} chapter details`}
+                >
+                  {/* Logo card — shows university logo only */}
+                  <div className={`w-40 h-40 md:w-52 md:h-52 rounded-[2.5rem] flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:-translate-y-3 group-hover:shadow-[12px_20px_32px_rgba(0,0,0,0.12),-4px_-4px_16px_rgba(255,255,255,0.8)] ${chapter.active
+                    ? 'bg-white shadow-[8px_8px_16px_#d9d6db,-8px_-8px_16px_#ffffff,inset_4px_4px_8px_rgba(255,255,255,0.9),inset_-4px_-4px_8px_rgba(0,0,0,0.05)]'
+                    : 'bg-[#F1EEF4] text-[#A6979F] shadow-[8px_8px_16px_#d9d6db,-8px_-8px_16px_#ffffff,inset_4px_4px_8px_rgba(255,255,255,0.8),inset_-4px_-4px_8px_rgba(0,0,0,0.05)]'
+                    }`}>
+                    {chapter.logo ? (
+                      <img src={chapter.logo} alt={`${chapter.university} logo`} className="w-full h-full object-contain p-6" />
+                    ) : (
+                      <span className="font-extrabold text-5xl text-[#D45995]">
+                        {chapter.city.substring(0, 2).toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  {/* University name badge */}
+                  <div className="text-center bg-[#F1EEF4] px-6 py-3 rounded-2xl shadow-[4px_4px_8px_#d9d6db,-4px_-4px_8px_#ffffff,inset_2px_2px_4px_rgba(255,255,255,0.7),inset_-2px_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff]">
+                    <span className="font-bold text-base text-[#4A4045] block">{chapter.university}</span>
+                    <span className="font-medium text-sm text-[#A6979F]">{chapter.city}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <StudentChapterMap chapters={chapters} onChapterClick={setSelectedChapter} />
+          )}
+        </section>
 
-              <p className="mt-2 flex items-center gap-2 text-sm text-[#75616d]">
-                <MapPin size={16} className="text-[#c21875]" />
-                {chapter.city}
-              </p>
+        {/* Section 3: Partners — Infinite Marquee Strip */}
+        <section id="partners" className="scroll-mt-28 rounded-[3rem] p-8 md:p-16 bg-[#F1EEF4] shadow-[12px_12px_24px_#d9d6db,-12px_-12px_24px_#ffffff,inset_6px_6px_12px_rgba(255,255,255,0.7),inset_-6px_-6px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+          <h2 className="font-extrabold text-4xl md:text-6xl text-[#4A4045] mb-12 text-center">
+            Partners
+          </h2>
+          {/* Marquee wrapper with fade masks on edges */}
+          <div
+            className="relative"
+            style={{
+              maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+            }}
+          >
+            <div className="marquee-track">
+              {marqueeItems.map((partner, i) => (
+                <a
+                  key={i}
+                  href={partner.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 mx-4 flex flex-col items-center justify-center w-56 h-40 p-8 rounded-[2rem] bg-[#F1EEF4] shadow-[6px_6px_12px_#d9d6db,-6px_-6px_12px_#ffffff,inset_3px_3px_6px_rgba(255,255,255,0.8),inset_-3px_-3px_6px_rgba(0,0,0,0.05)] hover:shadow-[inset_6px_6px_12px_#d9d6db,inset_-6px_-6px_12px_#ffffff] hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                >
+                  {partner.logo ? (
+                    <img src={partner.logo} alt={partner.name} className="max-h-20 w-auto object-contain" />
+                  ) : (
+                    <div className="w-16 h-16 rounded-2xl bg-[#e8e4e9] flex items-center justify-center">
+                      <span className="font-bold text-sm text-[#A6979F] text-center">{partner.name}</span>
+                    </div>
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 4: Contact — full width, one row */}
+        <section id="contact" className="scroll-mt-28 rounded-[3rem] p-8 md:p-12 bg-[#F1EEF4] shadow-[12px_12px_24px_#d9d6db,-12px_-12px_24px_#ffffff,inset_6px_6px_12px_rgba(255,255,255,0.7),inset_-6px_-6px_12px_rgba(0,0,0,0.05)]">
+          <h2 className="font-extrabold text-3xl md:text-4xl text-[#4A4045] mb-8">Want to become a Partner? or a Student Chapter?</h2>
+          <div className="flex flex-col md:flex-row gap-10">
+
+            {/* Left: Socials */}
+            <div className="md:w-1/3 flex flex-col gap-4">
+              <p className="font-semibold text-xs uppercase tracking-widest text-[#A6979F] mb-2">Find us</p>
 
               <a
-                href="#contact"
-                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#8e1556] hover:text-[#c21875]"
+                href="https://www.linkedin.com/company/womenshealthunion/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-[#F1EEF4] shadow-[6px_6px_12px_#d9d6db,-6px_-6px_12px_#ffffff,inset_3px_3px_6px_rgba(255,255,255,0.8),inset_-3px_-3px_6px_rgba(0,0,0,0.05)] hover:shadow-[inset_6px_6px_12px_#d9d6db,inset_-6px_-6px_12px_#ffffff] transition-shadow text-[#4A4045] group"
               >
-                Get in touch
-                <ArrowRight size={16} />
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#E786B6] to-[#D45995] text-white flex items-center justify-center flex-shrink-0 shadow-[inset_2px_2px_4px_rgba(255,255,255,0.4),inset_-2px_-2px_4px_rgba(0,0,0,0.1)]">
+                  <span className="font-black text-sm tracking-tight">in</span>
+                </div>
+                <span className="font-bold text-sm">Women's Health Union</span>
               </a>
-            </article>
-          ))}
-        </div>
-      </section>
 
-      <section id="partners" className="scroll-mt-24 bg-[#291522] text-white">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#f6a5c9]">
-            Partners
-          </p>
-
-          <div className="mt-4 grid gap-10 md:grid-cols-2 md:items-end">
-            <h2 className="max-w-xl text-4xl font-bold tracking-tight md:text-5xl">
-              Change happens when we work together.
-            </h2>
-
-            <p className="max-w-lg leading-7 text-[#ead9e1]">
-              We want to collaborate with student unions, charities, educators,
-              healthcare organisations and community groups committed to better
-              women’s health.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {partners.map((partner) => (
-              <div
-                key={partner}
-                className="flex min-h-28 items-center justify-center rounded-3xl border border-white/15 bg-white/5 px-6 text-center font-semibold text-[#f9deec]"
+              <a
+                href="mailto:hello@womenshealthunion.org"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-[#F1EEF4] shadow-[6px_6px_12px_#d9d6db,-6px_-6px_12px_#ffffff,inset_3px_3px_6px_rgba(255,255,255,0.8),inset_-3px_-3px_6px_rgba(0,0,0,0.05)] hover:shadow-[inset_6px_6px_12px_#d9d6db,inset_-6px_-6px_12px_#ffffff] transition-shadow text-[#4A4045] group"
               >
-                {partner}
-              </div>
-            ))}
-          </div>
-
-          <a
-            href="#contact"
-            className="mt-10 inline-flex items-center gap-2 rounded-full bg-[#c21875] px-6 py-3 font-semibold text-white transition hover:bg-[#e3348a]"
-          >
-            Become a partner
-            <ArrowRight size={18} />
-          </a>
-        </div>
-      </section>
-
-      <section
-        id="start-a-chapter"
-        className="scroll-mt-24 border-b border-[#ecdce5] bg-[#f8e7f0]"
-      >
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-20 md:grid-cols-[1.2fr_0.8fr] md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#c21875]">
-              Bring WHU to your campus
-            </p>
-            <h2 className="mt-4 max-w-2xl text-4xl font-bold tracking-tight md:text-5xl">
-              No chapter at your university? Start one.
-            </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-[#75616d]">
-              We are building a network of student organisers. Register your
-              interest and we will help you take the first step.
-            </p>
-          </div>
-
-          <a
-            href="#contact"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-[#c21875] px-6 py-3 font-semibold text-white transition hover:bg-[#8e1556]"
-          >
-            Register interest
-            <ArrowRight size={18} />
-          </a>
-        </div>
-      </section>
-
-      <section id="contact" className="scroll-mt-24 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#c21875]">
-              Contact
-            </p>
-
-            <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-              Let’s connect.
-            </h2>
-
-            <p className="mt-5 max-w-md text-lg leading-8 text-[#75616d]">
-              Whether you want to join, start a chapter or explore a
-              partnership, we would love to hear from you.
-            </p>
-
-            <div className="mt-8 space-y-4 text-sm text-[#75616d]">
-              <p className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f8e7f0] text-[#c21875]">
-                  <Mail size={17} />
-                </span>
-                hello@womenshealthunion.org
-              </p>
-
-              <p className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f8e7f0] text-[#c21875]">
-                  <AtSign size={17} />
-                </span>
-                @womenshealthunion
-              </p>
-            </div>
-          </div>
-
-          <form
-            onSubmit={(event) => event.preventDefault()}
-            className="rounded-3xl border border-[#f0dce6] bg-[#fff8fb] p-6 md:p-8"
-          >
-            <div className="grid gap-5 sm:grid-cols-2">
-              <label className="text-sm font-semibold">
-                Name
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your name"
-                  className="mt-2 w-full rounded-2xl border border-[#e5ccd9] bg-white px-4 py-3 font-normal outline-none transition focus:border-[#c21875] focus:ring-2 focus:ring-[#c21875]/20"
-                />
-              </label>
-
-              <label className="text-sm font-semibold">
-                Email
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  className="mt-2 w-full rounded-2xl border border-[#e5ccd9] bg-white px-4 py-3 font-normal outline-none transition focus:border-[#c21875] focus:ring-2 focus:ring-[#c21875]/20"
-                />
-              </label>
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#E786B6] to-[#D45995] text-white flex items-center justify-center flex-shrink-0 shadow-[inset_2px_2px_4px_rgba(255,255,255,0.4),inset_-2px_-2px_4px_rgba(0,0,0,0.1)]">
+                  <Mail size={20} />
+                </div>
+                <span className="font-bold text-sm">hello@womenshealthunion.org</span>
+              </a>
             </div>
 
-            <label className="mt-5 block text-sm font-semibold">
-              I’m getting in touch about
-              <select
-                name="topic"
-                className="mt-2 w-full rounded-2xl border border-[#e5ccd9] bg-white px-4 py-3 font-normal outline-none transition focus:border-[#c21875] focus:ring-2 focus:ring-[#c21875]/20"
-              >
-                <option>Joining a chapter</option>
-                <option>Starting a chapter</option>
-                <option>A partnership</option>
-                <option>General enquiry</option>
-              </select>
-            </label>
+            {/* Divider */}
+            <div className="hidden md:block w-px bg-[#d9d6db] self-stretch mx-2 rounded-full" />
 
-            <label className="mt-5 block text-sm font-semibold">
-              Message
-              <textarea
-                name="message"
-                rows={5}
-                placeholder="Tell us a little about how we can help."
-                className="mt-2 w-full resize-none rounded-2xl border border-[#e5ccd9] bg-white px-4 py-3 font-normal outline-none transition focus:border-[#c21875] focus:ring-2 focus:ring-[#c21875]/20"
-              />
-            </label>
+            {/* Right: Contact Form */}
+            <div className="flex-1">
+              <p className="font-semibold text-xs uppercase tracking-widest text-[#A6979F] mb-4">Get in touch</p>
+              <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    className="flex-1 px-5 py-3 rounded-2xl bg-[#F1EEF4] shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff] outline-none font-semibold text-sm text-[#4A4045] placeholder-[#B9ADB5] focus:shadow-[inset_4px_4px_8px_#d0cdd1,inset_-4px_-4px_8px_#ffffff,0_0_0_2px_#D45995] transition-shadow"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    className="flex-1 px-5 py-3 rounded-2xl bg-[#F1EEF4] shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff] outline-none font-semibold text-sm text-[#4A4045] placeholder-[#B9ADB5] focus:shadow-[inset_4px_4px_8px_#d0cdd1,inset_-4px_-4px_8px_#ffffff,0_0_0_2px_#D45995] transition-shadow"
+                  />
+                </div>
 
+                <select
+                  defaultValue=""
+                  className="px-5 py-3 rounded-2xl bg-[#F1EEF4] shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff] outline-none font-semibold text-sm text-[#4A4045] focus:shadow-[inset_4px_4px_8px_#d0cdd1,inset_-4px_-4px_8px_#ffffff,0_0_0_2px_#D45995] transition-shadow cursor-pointer appearance-none"
+                >
+                  <option value="" disabled className="text-[#B9ADB5]">What's up? 👋</option>
+                  <option value="learn">I want to learn more</option>
+                  <option value="partner">Partnership</option>
+                  <option value="chapter">I'd like to open a chapter</option>
+                  <option value="other">Something else</option>
+                </select>
+
+                <textarea
+                  rows={4}
+                  placeholder="Your message..."
+                  className="w-full px-5 py-3 rounded-2xl bg-[#F1EEF4] shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff] outline-none font-semibold text-sm text-[#4A4045] placeholder-[#B9ADB5] focus:shadow-[inset_4px_4px_8px_#d0cdd1,inset_-4px_-4px_8px_#ffffff,0_0_0_2px_#D45995] transition-shadow resize-y"
+                />
+
+                <button
+                  type="submit"
+                  className="self-start px-8 py-3 rounded-2xl bg-[#D45995] text-white font-bold text-sm shadow-[6px_6px_14px_rgba(0,0,0,0.12),-4px_-4px_10px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(255,255,255,0.3),inset_-2px_-2px_4px_rgba(0,0,0,0.1)] hover:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.15),inset_-4px_-4px_8px_rgba(255,255,255,0.2)] hover:scale-[0.98] transition-all"
+                >
+                  Send message →
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      {/* Chapter Modal — wider, animated, no logo */}
+      {selectedChapter && (
+        <div
+          className="fixed inset-0 z-[100] bg-white/40 backdrop-blur-md flex items-center justify-center p-6"
+          onClick={() => setSelectedChapter(null)}
+        >
+          <div
+            className="modal-pop w-full max-w-4xl min-h-[520px] bg-[#F1EEF4] rounded-[3rem] p-12 shadow-[20px_20px_40px_rgba(0,0,0,0.2),-20px_-20px_40px_rgba(255,255,255,0.8),inset_6px_6px_12px_rgba(255,255,255,0.9),inset_-6px_-6px_12px_rgba(0,0,0,0.05)] relative flex"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
             <button
-              type="submit"
-              className="mt-6 inline-flex rounded-full bg-[#c21875] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8e1556]"
+              className="absolute top-8 right-8 w-12 h-12 rounded-full bg-[#E786B6] text-white flex items-center justify-center shadow-[inset_2px_2px_5px_rgba(255,255,255,0.4),inset_-2px_-2px_5px_rgba(0,0,0,0.1)] hover:scale-110 transition-transform"
+              onClick={() => setSelectedChapter(null)}
+              aria-label="Close"
             >
-              Send enquiry
+              <X size={24} />
             </button>
 
-            <p className="mt-4 text-xs leading-5 text-[#75616d]">
-              Please do not include medical information, symptoms, diagnoses or
-              urgent health concerns in this form.
-            </p>
-          </form>
-        </div>
-      </section>
+            {/* Left Column: Vertical Title */}
+            <div className="w-24 md:w-36 flex items-center justify-center relative border-r-2 border-white shadow-[1px_0_0_0_#d9d6db] mr-10">
+              <h2 className="absolute -rotate-90 origin-center text-[#D45995] font-extrabold text-5xl md:text-6xl whitespace-nowrap tracking-tighter w-[460px] text-center left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                WHU × {selectedChapter.city}
+              </h2>
+            </div>
 
-      <footer className="bg-[#fff8fb]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 text-sm text-[#75616d] sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Women’s Health Union</p>
+            {/* Right Column */}
+            <div className="flex-1 flex flex-col items-start gap-8 pt-4">
 
-          <div className="flex gap-5">
-            <a href="#home" className="hover:text-[#c21875]">
-              Back to top
-            </a>
-            <a href="#contact" className="hover:text-[#c21875]">
-              Contact
-            </a>
+              {/* University name — no logo */}
+              <div>
+                <p className="text-[#A6979F] font-semibold text-sm uppercase tracking-widest mb-1">Student Chapter</p>
+                <h3 className="font-extrabold text-3xl md:text-4xl text-[#4A4045]">{selectedChapter.university}</h3>
+              </div>
+
+              {/* Committee placeholder */}
+              <div className="bg-[#F1EEF4] w-full p-6 rounded-2xl shadow-[4px_4px_8px_#d9d6db,-4px_-4px_8px_#ffffff,inset_2px_2px_4px_rgba(255,255,255,0.7),inset_-2px_-2px_4px_rgba(0,0,0,0.05)]">
+                <h4 className="font-extrabold text-xl text-[#D45995] mb-4">Committee</h4>
+                <div className="space-y-3">
+                  <div className="w-full h-4 bg-[#e8e4e9] rounded-full shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05)]"></div>
+                  <div className="w-5/6 h-4 bg-[#e8e4e9] rounded-full shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05)]"></div>
+                  <div className="w-4/6 h-4 bg-[#e8e4e9] rounded-full shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05)]"></div>
+                </div>
+              </div>
+
+              {/* Social icons */}
+              <div className="flex gap-6">
+                <a href="#" className="w-20 h-20 rounded-[1.5rem] bg-[#F1EEF4] shadow-[8px_8px_16px_#d9d6db,-8px_-8px_16px_#ffffff] flex items-center justify-center text-[#D45995] hover:shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff] transition-shadow">
+                  <Mail size={36} />
+                </a>
+                <a href="#" className="w-20 h-20 rounded-[1.5rem] bg-[#F1EEF4] shadow-[8px_8px_16px_#d9d6db,-8px_-8px_16px_#ffffff] flex items-center justify-center text-[#D45995] hover:shadow-[inset_4px_4px_8px_#d9d6db,inset_-4px_-4px_8px_#ffffff] transition-shadow">
+                  <Camera size={36} />
+                </a>
+              </div>
+
+            </div>
           </div>
         </div>
-      </footer>
+      )}
+
     </main>
   );
 }
