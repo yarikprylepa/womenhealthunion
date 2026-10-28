@@ -36,8 +36,13 @@ body {
 }
 
 @keyframes marquee-left {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .marquee-track {
@@ -51,9 +56,19 @@ body {
 }
 
 @keyframes modal-pop {
-  0%   { opacity: 0; transform: scale(0.88) translateY(24px); }
-  60%  { opacity: 1; transform: scale(1.02) translateY(-4px); }
-  100% { transform: scale(1) translateY(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(24px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-4px);
+  }
+
+  100% {
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal-pop {
@@ -61,7 +76,15 @@ body {
 }
 
 @keyframes chapter-card-expand {
-  0%   { transform: scale(1) translateY(0); }
-  50%  { transform: scale(1.08) translateY(-6px); }
-  100% { transform: scale(1) translateY(-2px); }
+  0% {
+    transform: scale(1) translateY(0);
+  }
+
+  50% {
+    transform: scale(1.08) translateY(-6px);
+  }
+
+  100% {
+    transform: scale(1) translateY(-2px);
+  }
 }
