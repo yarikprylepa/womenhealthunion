@@ -61,34 +61,32 @@ export default function Home() {
       <div className="w-full bg-gradient-to-b from-[#D45995] from-20% to-[#F1EEF4] to-100%">
 
         {/* Section 1: Hero */}
-        <section className="w-full pt-24 pb-16 md:py-32 relative">
-          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
-            {/* Left side: Logo & Motto */}
-            <div className="md:w-1/2 flex flex-col items-center text-center md:translate-y-6 md:-translate-x-4">
-              <h1 className="font-black text-[7rem] md:text-[12rem] leading-[0.85] tracking-tighter text-white drop-shadow-[0_6px_10px_rgba(90,20,55,0.25)] select-none">
-                WHU
-              </h1>
-              <div className="text-[white] font-extrabold text-xl md:text-2xl px-6 py-3shadow-md mt-6">
-                Women's Health Union
-              </div>
-            </div>
-            {/* Right side: 5% Stat Card with Yellow Highlight */}
-            <div className="md:w-1/2 flex justify-center md:justify-end w-full">
-              <div className="w-full max-w-md bg-white text-[#1E1B1D] rounded-3xl p-8 md:p-10 shadow-xl border border-black/5 transform md:rotate-1 hover:rotate-0 transition-transform duration-300">
-                <h3 className="font-bold text-2xl md:text-3xl leading-snug">
-                  <span className="font-black text-4xl md:text-6xl block mb-4 text-[#D45995] tracking-tight">
-                    Less than
-                  </span>
-                  <span className="font-black text-4xl md:text-6xl block mb-4 text-[#FACC15] tracking-tight">
-                    5%
-                  </span>
-                  <span className="text-[#4A4045] font-medium leading-relaxed block text-lg md:text-xl">
-                    of the UK have adequate access to women's health resources on campus.
-                  </span>
-                </h3>
-              </div>
+        <section className="w-full min-h-[calc(100svh-18rem)] pt-32 pb-16 md:pt-48 md:pb-20 relative">          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
+          {/* Left side: Logo & Motto */}
+          <div className="md:w-1/2 flex flex-col items-center text-center md:translate-y-6 md:-translate-x-4">            <h1 className="font-black text-[8rem] md:text-[clamp(12rem,18vw,14rem)] leading-[0.85] tracking-tighter text-white drop-shadow-[0_6px_10px_rgba(90,20,55,0.25)] select-none">
+            WHU
+          </h1>
+            <div className="text-white font-extrabold text-xl md:text-2xl px-6 py-3 mt-6">
+              Women's Health Union
             </div>
           </div>
+          {/* Right side: 5% Stat Card with Yellow Highlight */}
+          <div className="md:w-1/2 flex justify-center md:justify-end w-full">
+            <div className="w-full max-w-md bg-white text-[#1E1B1D] rounded-3xl p-8 md:p-10 shadow-xl border border-black/5 transform md:rotate-1 hover:rotate-0 transition-transform duration-300">
+              <h3 className="font-bold text-2xl md:text-3xl leading-snug">
+                <span className="font-black text-4xl md:text-6xl block mb-4 text-[#D45995] tracking-tight">
+                  Less than
+                </span>
+                <span className="font-black text-4xl md:text-6xl block mb-4 text-[#FACC15] tracking-tight">
+                  5%
+                </span>
+                <span className="text-[#4A4045] font-medium leading-relaxed block text-lg md:text-xl">
+                  of the UK have adequate access to women's health resources on campus.
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
         </section>
 
         {/* About Us — directly on the gradient */}
@@ -119,11 +117,12 @@ export default function Home() {
           id="chapters"
           className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14"
         >
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 pb-6 border-b border-[#4A4045]/15">            <div>
-            <h2 className="font-extrabold text-4xl md:text-5xl text-[#1E1B1D]">
-              Student Chapters
-            </h2>
-          </div>
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 pb-6 border-b border-[#4A4045]/15">
+            <div>
+              <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight">
+                Student Chapters
+              </h2>
+            </div>
             {/* Toggle Switch */}
             <div className="flex items-center bg-[#F1EEF4] rounded-full p-1 border border-black/5">
               <button
@@ -184,43 +183,63 @@ export default function Home() {
         <section
           id="partners"
           className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14 overflow-hidden"
-        >          <div className="text-center mb-10">
-            <h2 className="font-extrabold text-4xl md:text-5xl text-[#1E1B1D]">
+        >
+          <div className="text-center mb-10">
+            <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight">
               We are proud to partner with
             </h2>
           </div>
+
           {/* Marquee wrapper with fade masks on edges */}
           <div
             className="relative"
             style={{
-              maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
             }}
           >
-            <div className="marquee-track">
+            <div className="marquee-track py-5">
               {marqueeItems.map((partner, i) => {
                 const primaryLink = partner.links[0]?.url ?? "#";
+
                 return (
                   <a
                     key={i}
                     href={primaryLink}
                     target={primaryLink !== "#" ? "_blank" : undefined}
                     rel={primaryLink !== "#" ? "noopener noreferrer" : undefined}
-                    className="relative flex-shrink-0 mx-4 flex flex-col items-center justify-center w-56 h-40 p-6 rounded-2xl bg-[#F1EEF4]/60 border border-black/5 hover:border-[#D45995]/50 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
+                    className="relative flex-shrink-0 mx-4 flex flex-col w-56 h-48 p-5 rounded-xl bg-white border border-black/5 shadow-[0_4px_14px_rgba(30,27,29,0.08)] hover:shadow-[0_8px_22px_rgba(30,27,29,0.14)] transition-shadow duration-300 cursor-pointer group overflow-hidden"
                   >
-                    {/* Card content — blurs on hover */}
-                    <div className="flex flex-col items-center justify-center w-full h-full transition-all duration-300 group-hover:blur-[3px] group-hover:opacity-20">
-                      {partner.logo ? (
-                        <img src={partner.logo} alt={partner.name} className="max-h-20 w-auto object-contain" />
-                      ) : (
-                        <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center shadow-sm">
-                          <span className="font-bold text-xs text-[#1E1B1D] text-center uppercase tracking-wider">{partner.name}</span>
-                        </div>
+                    {/* Logo area — description appears here on hover */}
+                    <div className="relative flex-1 min-h-0 w-full flex items-center justify-center">
+                      {partner.logo && (
+                        <img
+                          src={partner.logo}
+                          alt=""
+                          className="max-h-20 max-w-full object-contain transition-all duration-300 group-hover:blur-[3px] group-hover:opacity-20 group-focus-visible:blur-[3px] group-focus-visible:opacity-20"
+                        />
                       )}
+
+                      {/* Always visible without a logo; revealed on hover otherwise */}
+                      <div
+                        className={`absolute inset-0 flex items-center justify-center px-1 transition-opacity duration-300 pointer-events-none ${partner.logo
+                          ? "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+                          : "opacity-100"
+                          }`}
+                      >
+                        <p className="text-[#4A4045] font-medium text-xs text-center leading-relaxed">
+                          {partner.about}
+                        </p>
+                      </div>
                     </div>
-                    {/* Hover overlay — about text */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <p className="text-[#1E1B1D] font-semibold text-xs text-center leading-relaxed">{partner.about}</p>
+
+                    {/* Partner name — stays visible below the logo */}
+                    <div className="w-full mt-4 pt-3 border-t border-black/5">
+                      <p className="text-[#1E1B1D] font-bold text-sm text-center leading-snug">
+                        {partner.name}
+                      </p>
                     </div>
                   </a>
                 );
@@ -228,14 +247,15 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Section 4: Contact — full width, one row */}
         <section
           id="contact"
           className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14 border-t border-[#4A4045]/15"
         >
           <div className="mb-10 pb-6 border-b border-gray-100">
-            <h2 className="font-extrabold text-3xl md:text-4xl text-[#1E1B1D]">Want to become a Partner? or a Student Chapter?</h2>
+            <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight">
+              Want to become a Partner? or a Student Chapter?
+            </h2>
           </div>
 
           <div className="flex flex-col md:flex-row gap-10">
