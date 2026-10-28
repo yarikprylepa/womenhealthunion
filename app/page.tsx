@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Mail, AtSign, Camera, X } from "lucide-react";
+import partnersBase from "./data/partners";
 
 const StudentChapterMap = dynamic(() => import("./components/StudentChapterMap"), { ssr: false });
 
@@ -28,13 +29,6 @@ const chapters = [
   },
 ];
 
-// Partners — real logos + placeholders, duplicated for seamless marquee
-const partnersBase = [
-  { name: "Bobbi", logo: "/logos/bobbilogo.png", href: "https://www.instagram.com/wearebobbi/", description: "Bobbi is an inclusive beauty brand championing self-expression and wellbeing for every woman." },
-  { name: "Partner 2", logo: null, href: "#", description: "A valued partner supporting our mission to make women's health resources accessible across every UK campus." },
-  { name: "Partner 3", logo: null, href: "#", description: "Working alongside WHU to drive awareness and provide holistic health education for students." },
-  { name: "Partner 4", logo: null, href: "#", description: "Proudly supporting WHU in building a nationwide network of empowered student advocates." },
-];
 
 export default function Home() {
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
@@ -189,30 +183,33 @@ export default function Home() {
             }}
           >
             <div className="marquee-track">
-              {marqueeItems.map((partner, i) => (
-                <a
-                  key={i}
-                  href={partner.href}
-                  target={partner.href !== "#" ? "_blank" : undefined}
-                  rel={partner.href !== "#" ? "noopener noreferrer" : undefined}
-                  className="relative flex-shrink-0 mx-4 flex flex-col items-center justify-center w-56 h-40 p-6 rounded-2xl bg-[#F1EEF4]/60 border border-black/5 hover:border-[#D45995]/50 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
-                >
-                  {/* Card content — blurs on hover */}
-                  <div className="flex flex-col items-center justify-center w-full h-full transition-all duration-300 group-hover:blur-[3px] group-hover:opacity-20">
-                    {partner.logo ? (
-                      <img src={partner.logo} alt={partner.name} className="max-h-20 w-auto object-contain" />
-                    ) : (
-                      <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center shadow-sm">
-                        <span className="font-bold text-xs text-[#1E1B1D] text-center uppercase tracking-wider">{partner.name}</span>
-                      </div>
-                    )}
-                  </div>
-                  {/* Hover overlay — description text */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <p className="text-[#1E1B1D] font-semibold text-xs text-center leading-relaxed">{partner.description}</p>
-                  </div>
-                </a>
-              ))}
+              {marqueeItems.map((partner, i) => {
+                const primaryLink = partner.links[0]?.url ?? "#";
+                return (
+                  <a
+                    key={i}
+                    href={primaryLink}
+                    target={primaryLink !== "#" ? "_blank" : undefined}
+                    rel={primaryLink !== "#" ? "noopener noreferrer" : undefined}
+                    className="relative flex-shrink-0 mx-4 flex flex-col items-center justify-center w-56 h-40 p-6 rounded-2xl bg-[#F1EEF4]/60 border border-black/5 hover:border-[#D45995]/50 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
+                  >
+                    {/* Card content — blurs on hover */}
+                    <div className="flex flex-col items-center justify-center w-full h-full transition-all duration-300 group-hover:blur-[3px] group-hover:opacity-20">
+                      {partner.logo ? (
+                        <img src={partner.logo} alt={partner.name} className="max-h-20 w-auto object-contain" />
+                      ) : (
+                        <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center shadow-sm">
+                          <span className="font-bold text-xs text-[#1E1B1D] text-center uppercase tracking-wider">{partner.name}</span>
+                        </div>
+                      )}
+                    </div>
+                    {/* Hover overlay — about text */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                      <p className="text-[#1E1B1D] font-semibold text-xs text-center leading-relaxed">{partner.about}</p>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
           </div>
         </section>
