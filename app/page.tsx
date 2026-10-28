@@ -7,7 +7,6 @@ import partnersBase from "./data/partners";
 
 const StudentChapterMap = dynamic(() => import("./components/StudentChapterMap"), { ssr: false });
 
-// University of Reading removed
 const chapters = [
   {
     university: "Queen Mary University of London", city: "London", active: true, logo: "/logos/qmullogo.png", lat: 51.5241, lng: -0.0404,
@@ -58,59 +57,73 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Section 1: Hero */}
-      <section className="w-full bg-gradient-to-b from-[#D45995] from-80% to-[#F1EEF4] pt-24 pb-16 md:py-32 relative">
-        <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
+      {/* Shared gradient across Hero + About Us */}
+      <div className="w-full bg-gradient-to-b from-[#D45995] from-20% to-[#F1EEF4] to-100%">
 
-          {/* Left side: Logo & Motto */}
-          <div className="md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
-            <h1 className="font-extrabold text-[7rem] md:text-[11rem] leading-[0.85] tracking-tighter text-white drop-shadow-md select-none">
-              WHU
-            </h1>
-            <div className="inline-block bg-white text-[#D45995] font-extrabold text-xl md:text-2xl px-6 py-3 rounded-2xl shadow-md mt-6">
-              Women's Health Union
+        {/* Section 1: Hero */}
+        <section className="w-full pt-24 pb-16 md:py-32 relative">
+          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
+            {/* Left side: Logo & Motto */}
+            <div className="md:w-1/2 flex flex-col items-center text-center md:translate-y-6 md:-translate-x-4">
+              <h1 className="font-black text-[7rem] md:text-[12rem] leading-[0.85] tracking-tighter text-white drop-shadow-[0_6px_10px_rgba(90,20,55,0.25)] select-none">
+                WHU
+              </h1>
+              <div className="text-[white] font-extrabold text-xl md:text-2xl px-6 py-3shadow-md mt-6">
+                Women's Health Union
+              </div>
+            </div>
+            {/* Right side: 5% Stat Card with Yellow Highlight */}
+            <div className="md:w-1/2 flex justify-center md:justify-end w-full">
+              <div className="w-full max-w-md bg-white text-[#1E1B1D] rounded-3xl p-8 md:p-10 shadow-xl border border-black/5 transform md:rotate-1 hover:rotate-0 transition-transform duration-300">
+                <h3 className="font-bold text-2xl md:text-3xl leading-snug">
+                  <span className="font-black text-4xl md:text-6xl block mb-4 text-[#D45995] tracking-tight">
+                    Less than
+                  </span>
+                  <span className="font-black text-4xl md:text-6xl block mb-4 text-[#FACC15] tracking-tight">
+                    5%
+                  </span>
+                  <span className="text-[#4A4045] font-medium leading-relaxed block text-lg md:text-xl">
+                    of the UK have adequate access to women's health resources on campus.
+                  </span>
+                </h3>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Right side: 5% Stat Card with Yellow Highlight */}
-          <div className="md:w-1/2 flex justify-center md:justify-end w-full">
-            <div className="w-full max-w-md bg-white text-[#1E1B1D] rounded-3xl p-8 md:p-10 shadow-xl border border-black/5 transform md:rotate-1 hover:rotate-0 transition-transform duration-300">
-              <h3 className="font-bold text-2xl md:text-3xl leading-snug">
-                <span className="font-black text-4xl md:text-6xl block mb-4 text-[#FACC15] tracking-tight">
-                  Less than 5%
-                </span>
-                <span className="text-[#4A4045] font-medium leading-relaxed block text-lg md:text-xl">
-                  of the UK have adequate access to women's health resources on campus.
-                </span>
-              </h3>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Section 1.5: About Us — Wide Section (Matches Header Bar Width max-w-6xl) */}
-      <section id="about" className="scroll-mt-28 w-[90%] max-w-6xl mx-auto mb-16">
-        <div className="bg-white rounded-3xl p-8 md:p-14 shadow-xl border border-black/5">
-          <h2 className="font-extrabold text-3xl md:text-5xl text-[#1E1B1D] tracking-tight mb-6">
+        {/* About Us — directly on the gradient */}
+        <section
+          id="about"
+          className="scroll-mt-28 w-[90%] max-w-6xl mx-auto px-2 md:px-4 py-8 md:py-12"
+        >
+          <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight mb-5">
             About Us
           </h2>
-          <p className="text-[#4A4045] text-lg md:text-2xl font-normal leading-relaxed max-w-4xl">
-            We are building a nationwide network of students advocating for better health resources, education, and community support at every single university across the UK.
-          </p>
-        </div>
-      </section>
 
+          <p className="text-[#4A4045] text-base md:text-xl leading-relaxed max-w-4xl">
+            We are building a nationwide network of students advocating for better
+            health resources, education, and community support at every single
+            university across the UK.
+          </p>
+        </section>
+
+        {/* Give the gradient room to finish below the card */}
+        <div className="h-16 md:h-24" aria-hidden="true" />
+      </div> {/* End shared gradient wrapper */}
+
+      {/* Your existing remaining sections */}
       <div className="w-[90%] max-w-6xl mx-auto space-y-16 [&>section]:scroll-mt-28">
 
         {/* Section 2: Student Chapters */}
-        <section id="chapters" className="scroll-mt-28 rounded-3xl p-8 md:p-14 bg-white shadow-xl border border-black/5">
-          <header className="flex flex-col md:flex-row justify-between items-center mb-12 gap-8 pb-6 border-b border-gray-100">
-            <div>
-              <h2 className="font-extrabold text-4xl md:text-5xl text-[#1E1B1D]">
-                Student Chapters
-              </h2>
-            </div>
+        <section
+          id="chapters"
+          className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14"
+        >
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 pb-6 border-b border-[#4A4045]/15">            <div>
+            <h2 className="font-extrabold text-4xl md:text-5xl text-[#1E1B1D]">
+              Student Chapters
+            </h2>
+          </div>
             {/* Toggle Switch */}
             <div className="flex items-center bg-[#F1EEF4] rounded-full p-1 border border-black/5">
               <button
@@ -168,10 +181,12 @@ export default function Home() {
         </section>
 
         {/* Section 3: Partners — Infinite Marquee Strip */}
-        <section id="partners" className="scroll-mt-28 rounded-3xl p-8 md:p-14 bg-white shadow-xl border border-black/5 overflow-hidden">
-          <div className="text-center mb-10">
+        <section
+          id="partners"
+          className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14 overflow-hidden"
+        >          <div className="text-center mb-10">
             <h2 className="font-extrabold text-4xl md:text-5xl text-[#1E1B1D]">
-              Partners
+              We are proud to partner with
             </h2>
           </div>
           {/* Marquee wrapper with fade masks on edges */}
@@ -215,7 +230,10 @@ export default function Home() {
         </section>
 
         {/* Section 4: Contact — full width, one row */}
-        <section id="contact" className="scroll-mt-28 rounded-3xl p-8 md:p-14 bg-white shadow-xl border border-black/5">
+        <section
+          id="contact"
+          className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14 border-t border-[#4A4045]/15"
+        >
           <div className="mb-10 pb-6 border-b border-gray-100">
             <h2 className="font-extrabold text-3xl md:text-4xl text-[#1E1B1D]">Want to become a Partner? or a Student Chapter?</h2>
           </div>
@@ -317,78 +335,80 @@ export default function Home() {
       </div>
 
       {/* Chapter Modal */}
-      {selectedChapter && (
-        <div
-          className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-6"
-          onClick={() => setSelectedChapter(null)}
-        >
+      {
+        selectedChapter && (
           <div
-            className="modal-pop w-full max-w-5xl bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-black/10 relative flex flex-col md:flex-row"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-6"
+            onClick={() => setSelectedChapter(null)}
           >
-            {/* Close button */}
-            <button
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#F1EEF4] hover:bg-[#e4dfe7] text-[#1E1B1D] flex items-center justify-center transition-colors cursor-pointer z-10"
-              onClick={() => setSelectedChapter(null)}
-              aria-label="Close"
+            <div
+              className="modal-pop w-full max-w-5xl bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-black/10 relative flex flex-col md:flex-row"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={20} />
-            </button>
+              {/* Close button */}
+              <button
+                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#F1EEF4] hover:bg-[#e4dfe7] text-[#1E1B1D] flex items-center justify-center transition-colors cursor-pointer z-10"
+                onClick={() => setSelectedChapter(null)}
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
 
-            {/* Left Column: Vertical Title */}
-            <div className="w-full md:w-36 flex items-center justify-center relative md:border-r border-gray-100 md:mr-10 pb-6 md:pb-0 mb-6 md:mb-0 border-b md:border-b-0 flex-shrink-0">
-              <h2 className="md:absolute md:-rotate-90 md:origin-center text-[#D45995] font-extrabold text-3xl md:text-5xl whitespace-nowrap tracking-tight md:w-[460px] text-center md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
-                WHU × {selectedChapter.city}
-              </h2>
-            </div>
-
-            {/* Right Column */}
-            <div className="flex-1 flex flex-col gap-6 pt-2 min-w-0">
-
-              {/* University name */}
-              <div>
-                <h3 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] pr-12">{selectedChapter.university}</h3>
+              {/* Left Column: Vertical Title */}
+              <div className="w-full md:w-36 flex items-center justify-center relative md:border-r border-gray-100 md:mr-10 pb-6 md:pb-0 mb-6 md:mb-0 border-b md:border-b-0 flex-shrink-0">
+                <h2 className="md:absolute md:-rotate-90 md:origin-center text-[#D45995] font-extrabold text-3xl md:text-5xl whitespace-nowrap tracking-tight md:w-[460px] text-center md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
+                  WHU × {selectedChapter.city}
+                </h2>
               </div>
 
-              {/* Leadership Committee grid */}
-              <div className="w-full">
-                <h4 className="font-extrabold text-base uppercase tracking-[0.15em] text-[#D45995] mb-4">Leadership Committee</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {selectedChapter.committee?.map((member: any, idx: number) => (
-                    <div
-                      key={idx}
-                      className="flex flex-col gap-1.5 p-5 rounded-2xl bg-[#F1EEF4]/60 border border-black/5 hover:bg-white hover:shadow-md hover:border-[#D45995]/20 transition-all duration-200"
-                    >
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#D45995]">{member.role}</span>
-                      <span className="font-extrabold text-lg text-[#1E1B1D] leading-tight">{member.name}</span>
-                      <span className="text-xs text-[#7C6E76] font-medium">{member.course}</span>
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="mt-1 text-xs font-semibold text-[#D45995] hover:underline truncate"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {member.email}
-                      </a>
-                    </div>
-                  ))}
+              {/* Right Column */}
+              <div className="flex-1 flex flex-col gap-6 pt-2 min-w-0">
+
+                {/* University name */}
+                <div>
+                  <h3 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] pr-12">{selectedChapter.university}</h3>
                 </div>
-              </div>
 
-              {/* Social icons */}
-              <div className="flex gap-4 pt-2">
-                <a href="#" className="w-12 h-12 rounded-xl bg-[#F1EEF4] hover:bg-[#D45995] hover:text-white text-[#1E1B1D] flex items-center justify-center transition-colors">
-                  <Mail size={20} />
-                </a>
-                <a href="#" className="w-12 h-12 rounded-xl bg-[#F1EEF4] hover:bg-[#D45995] hover:text-white text-[#1E1B1D] flex items-center justify-center transition-colors">
-                  <Camera size={20} />
-                </a>
-              </div>
+                {/* Leadership Committee grid */}
+                <div className="w-full">
+                  <h4 className="font-extrabold text-base uppercase tracking-[0.15em] text-[#D45995] mb-4">Leadership Committee</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedChapter.committee?.map((member: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col gap-1.5 p-5 rounded-2xl bg-[#F1EEF4]/60 border border-black/5 hover:bg-white hover:shadow-md hover:border-[#D45995]/20 transition-all duration-200"
+                      >
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#D45995]">{member.role}</span>
+                        <span className="font-extrabold text-lg text-[#1E1B1D] leading-tight">{member.name}</span>
+                        <span className="text-xs text-[#7C6E76] font-medium">{member.course}</span>
+                        <a
+                          href={`mailto:${member.email}`}
+                          className="mt-1 text-xs font-semibold text-[#D45995] hover:underline truncate"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {member.email}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
+                {/* Social icons */}
+                <div className="flex gap-4 pt-2">
+                  <a href="#" className="w-12 h-12 rounded-xl bg-[#F1EEF4] hover:bg-[#D45995] hover:text-white text-[#1E1B1D] flex items-center justify-center transition-colors">
+                    <Mail size={20} />
+                  </a>
+                  <a href="#" className="w-12 h-12 rounded-xl bg-[#F1EEF4] hover:bg-[#D45995] hover:text-white text-[#1E1B1D] flex items-center justify-center transition-colors">
+                    <Camera size={20} />
+                  </a>
+                </div>
+
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-    </main>
+    </main >
   );
 }
