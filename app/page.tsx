@@ -32,6 +32,7 @@ const chapters = [
 export default function Home() {
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const [showAllPartners, setShowAllPartners] = useState(false);
 
   // Smooth-scroll helper for nav links
   const scrollTo = useCallback((id: string) => (e: React.MouseEvent) => {
@@ -244,6 +245,81 @@ export default function Home() {
                   </a>
                 );
               })}
+            </div>
+          </div>
+          {/* Centred expand / collapse button */}
+          <div className="flex justify-center mt-8">
+            <button
+              type="button"
+              onClick={() => setShowAllPartners((previous) => !previous)}
+              aria-expanded={showAllPartners}
+              aria-controls="all-partners"
+              className="inline-flex items-center gap-3 border-b-2 border-[#D45995] px-1 py-2 text-sm font-bold text-[#1E1B1D] hover:text-[#D45995] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D45995]"
+            >
+              {showAllPartners ? "Show fewer partners" : "Show all partners"}
+
+              <span
+                aria-hidden="true"
+                className={`inline-block transition-transform duration-200 ${showAllPartners ? "rotate-180" : ""
+                  }`}
+              >
+                ↓
+              </span>
+            </button>
+          </div>
+
+          {/* Expanded partner directory — use the original, unduplicated data */}
+          <div id="all-partners" hidden={!showAllPartners}>
+            <div className="mt-12 divide-y divide-[#4A4045]/15">
+              {partnersBase.map((partner, index) => (
+                <article
+                  key={`${partner.name}-${index}`}
+                  className="grid grid-cols-1 md:grid-cols-[15rem_minmax(0,1fr)] gap-6 md:gap-12 py-10"
+                >
+                  {/* Left: logo, name and website / social links */}
+                  <div className="flex flex-col items-start">
+                    {partner.logo && (
+                      <div className="w-full max-w-[15rem] h-28 flex items-center justify-start mb-5">
+                        <img
+                          src={partner.logo}
+                          alt={`${partner.name} logo`}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    )}
+
+                    <h3 className="font-bold text-lg text-[#1E1B1D]">
+                      {partner.name}
+                    </h3>
+
+                    <div className="flex flex-col items-start gap-2 mt-4 w-full min-w-0">
+                      {partner.links
+                        .filter((link) => link.url && link.url !== "#")
+                        .map((link, linkIndex) => (
+                          <a
+                            key={`${link.url}-${linkIndex}`}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="max-w-full text-sm font-semibold text-[#A82F6B] underline underline-offset-4 decoration-[#D45995]/40 hover:decoration-[#D45995] transition-colors break-all"
+                          >
+                            {link.url
+                              .replace(/^https?:\/\/(www\.)?/, "")
+                              .replace(/\/$/, "")}
+                            <span aria-hidden="true"> ↗</span>
+                          </a>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Right: about the partner */}
+                  <div className="md:pt-2 min-w-0">
+                    <p className="text-base md:text-lg leading-relaxed text-[#4A4045] whitespace-pre-line">
+                      {partner.about}
+                    </p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>

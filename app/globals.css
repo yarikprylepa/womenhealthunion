@@ -48,7 +48,7 @@ body {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-left 20s linear infinite;
+  animation: marquee-left 60s linear infinite;
 }
 
 .marquee-track:hover {
