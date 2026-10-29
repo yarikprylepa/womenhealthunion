@@ -215,12 +215,6 @@ export default function Home() {
           {/* Marquee wrapper */}
           <div
             className="relative"
-            style={{
-              maskImage:
-                "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
-            }}
           >
             <div className="marquee-track py-6">
               {marqueeItems.map((partner, i) => {
