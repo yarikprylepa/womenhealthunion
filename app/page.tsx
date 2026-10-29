@@ -11,7 +11,7 @@ const chapters = [
   {
     university: "Queen Mary University of London", city: "London", active: true, logo: "/logos/qmullogo.png", lat: 51.5241, lng: -0.0404,
     committee: [
-      { role: "President", name: "Amara Okafor", course: "BSc Biomedical Sciences", email: "afo234@qmul.ac.uk" },
+      { role: "President", name: "Hanling Zhang", course: "BSc Biomedical Sciences", email: "hanling.zhang@se26.qmul.ac.uk" },
       { role: "Vice-President", name: "Priya Sharma", course: "BSc Global Public Health", email: "psh891@qmul.ac.uk" },
       { role: "Treasury", name: "Leila Nkosi", course: "BSc Economics", email: "lnk102@qmul.ac.uk" },
       { role: "Social Outreach", name: "Sofia Marchetti", course: "BSc Psychology", email: "sma567@qmul.ac.uk" },
@@ -20,7 +20,7 @@ const chapters = [
   {
     university: "University of Sheffield", city: "Sheffield", active: true, logo: "/logos/sheflogo.png", lat: 53.3811, lng: -1.4701,
     committee: [
-      { role: "President", name: "Emily Rashford", course: "BSc Biomedical Sciences", email: "er1393@sheffield.ac.uk" },
+      { role: "President", name: "Janvi Ranish", course: "BSc Biomedical Sciences", email: "jranish1@sheffield.ac.uk" },
       { role: "Vice-President", name: "Aisha Yusuf", course: "BSc Nursing", email: "ay2841@sheffield.ac.uk" },
       { role: "Treasury", name: "Caitlin Hughes", course: "BSc Human Biology", email: "ch4017@sheffield.ac.uk" },
       { role: "Social Outreach", name: "Zara Patel", course: "BSc Health Psychology", email: "zp3920@sheffield.ac.uk" },
@@ -33,6 +33,24 @@ export default function Home() {
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [showAllPartners, setShowAllPartners] = useState(false);
+  const [partnerPage, setPartnerPage] = useState(1);
+
+  const partnersPerPage = 4;
+  const totalPartnerPages = Math.ceil(partnersBase.length / partnersPerPage);
+
+  const visiblePartners = partnersBase.slice(
+    (partnerPage - 1) * partnersPerPage,
+    partnerPage * partnersPerPage
+  );
+
+  const changePartnerPage = (page: number) => {
+    setPartnerPage(page);
+
+    document.getElementById("all-partners")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   // Smooth-scroll helper for nav links
   const scrollTo = useCallback((id: string) => (e: React.MouseEvent) => {
@@ -59,7 +77,7 @@ export default function Home() {
       </nav>
 
       {/* Shared gradient across Hero + About Us */}
-      <div className="w-full bg-gradient-to-b from-[#D45995] from-20% to-[#F1EEF4] to-100%">
+      <div className="w-full bg-gradient-to-b from-[#D45995] from-20% to-[#F1EEF4] to-65%">
 
         {/* Section 1: Hero */}
         <section className="w-full min-h-[calc(100svh-18rem)] pt-32 pb-16 md:pt-48 md:pb-20 relative">          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
@@ -76,13 +94,13 @@ export default function Home() {
             <div className="w-full max-w-md bg-white text-[#1E1B1D] rounded-3xl p-8 md:p-10 shadow-xl border border-black/5 transform md:rotate-1 hover:rotate-0 transition-transform duration-300">
               <h3 className="font-bold text-2xl md:text-3xl leading-snug">
                 <span className="font-black text-4xl md:text-6xl block mb-4 text-[#D45995] tracking-tight">
-                  Less than
+                  Fewer than
                 </span>
                 <span className="font-black text-4xl md:text-6xl block mb-4 text-[#FACC15] tracking-tight">
                   5%
                 </span>
                 <span className="text-[#4A4045] font-medium leading-relaxed block text-lg md:text-xl">
-                  of the UK have adequate access to women's health resources on campus.
+                  of UK universities have women’s health societies. Let’s change this!
                 </span>
               </h3>
             </div>
@@ -95,92 +113,95 @@ export default function Home() {
           id="about"
           className="scroll-mt-28 w-[90%] max-w-6xl mx-auto px-2 md:px-4 py-8 md:py-12"
         >
-          <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight mb-5">
+          <h2 className="text-white font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight mb-5">
             About Us
           </h2>
 
-          <p className="text-[#4A4045] text-base md:text-xl leading-relaxed max-w-4xl">
-            We are building a nationwide network of students advocating for better
-            health resources, education, and community support at every single
-            university across the UK.
+          <p className="text-white text-base md:text-xl leading-relaxed max-w-4xl">
+            The Women’s Health Union (WHU) is a national umbrella organisation helping students set up women’s health societies across the UK and connecting them with industry leaders in the field.
+          </p>
+
+          <p className="text-white text-base md:text-xl leading-relaxed max-w-4xl">
+            By building a student community around women’s health, we give students role models, visibility of careers in the field and a clear pathway into innovating in one of healthcare’s most underfunded areas.
           </p>
         </section>
 
         {/* Give the gradient room to finish below the card */}
         <div className="h-16 md:h-24" aria-hidden="true" />
-      </div> {/* End shared gradient wrapper */}
 
-      {/* Your existing remaining sections */}
-      <div className="w-[90%] max-w-6xl mx-auto space-y-16 [&>section]:scroll-mt-28">
 
-        {/* Section 2: Student Chapters */}
-        <section
-          id="chapters"
-          className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14"
-        >
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 pb-6 border-b border-[#4A4045]/15">
-            <div>
-              <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight">
-                Student Chapters
-              </h2>
-            </div>
-            {/* Toggle Switch */}
-            <div className="flex items-center bg-[#F1EEF4] rounded-full p-1 border border-black/5">
-              <button
-                onClick={() => setViewMode("list")}
-                aria-pressed={viewMode === "list"}
-                className={`px-6 py-2 rounded-full font-bold text-sm transition-all cursor-pointer ${viewMode === "list" ? 'bg-[#D45995] text-white shadow-md' : 'text-[#7C6E76] hover:text-[#1E1B1D]'}`}
-              >
-                List
-              </button>
-              <button
-                onClick={() => setViewMode("map")}
-                aria-pressed={viewMode === "map"}
-                className={`px-6 py-2 rounded-full font-bold text-sm transition-all cursor-pointer ${viewMode === "map" ? 'bg-[#D45995] text-white shadow-md' : 'text-[#7C6E76] hover:text-[#1E1B1D]'}`}
-              >
-                Map
-              </button>
-            </div>
-          </header>
+        {/* Your existing remaining sections */}
+        <div className="w-[90%] max-w-6xl mx-auto space-y-16 [&>section]:scroll-mt-28">
 
-          {viewMode === "list" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {chapters.map((chapter, i) => (
+          {/* Section 2: Student Chapters */}
+          <section
+            id="chapters"
+            className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14"
+          >
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 pb-6 ">
+              <div>
+                <h2 className="font-extrabold text-2xl md:text-4xl text-[#1E1B1D] tracking-tight">
+                  Our Student Chapters
+                </h2>
+              </div>
+              {/* Toggle Switch */}
+              <div className="flex items-center bg-[#F1EEF4] rounded-full p-1 border border-black/5">
                 <button
-                  key={i}
-                  onClick={() => setSelectedChapter(chapter)}
-                  className="flex flex-col p-8 bg-[#F1EEF4]/60 rounded-3xl border border-black/5 hover:border-[#D45995]/40 hover:bg-white hover:shadow-xl transition-all duration-300 text-left group cursor-pointer"
-                  aria-label={`Open ${chapter.university} chapter details`}
+                  onClick={() => setViewMode("list")}
+                  aria-pressed={viewMode === "list"}
+                  className={`px-6 py-2 rounded-full font-bold text-sm transition-all cursor-pointer ${viewMode === "list" ? 'bg-[#D45995] text-white shadow-md' : 'text-[#7C6E76] hover:text-[#1E1B1D]'}`}
                 >
-                  {/* Logo container */}
-                  <div className="w-full h-48 bg-white rounded-2xl flex items-center justify-center p-6 mb-6 shadow-sm group-hover:scale-[1.02] transition-transform">
-                    {chapter.logo ? (
-                      <img src={chapter.logo} alt={`${chapter.university} logo`} className="max-h-24 w-auto object-contain" />
-                    ) : (
-                      <span className="font-extrabold text-4xl text-[#D45995]">
-                        {chapter.city.substring(0, 2).toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-[#D45995] uppercase tracking-wider">{chapter.city}</span>
-                  </div>
-                  <h3 className="font-bold text-xl text-[#1E1B1D] group-hover:text-[#D45995] transition-colors leading-snug">
-                    {chapter.university}
-                  </h3>
-                  <div className="mt-6 pt-4 border-t border-gray-200/80 flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[#1E1B1D]">
-                    <span>See More</span>
-                    <span className="group-hover:translate-x-1 transition-transform text-[#D45995] text-sm">→</span>
-                  </div>
+                  List
                 </button>
-              ))}
-            </div>
-          ) : (
-            <StudentChapterMap chapters={chapters} onChapterClick={setSelectedChapter} />
-          )}
-        </section>
+                <button
+                  onClick={() => setViewMode("map")}
+                  aria-pressed={viewMode === "map"}
+                  className={`px-6 py-2 rounded-full font-bold text-sm transition-all cursor-pointer ${viewMode === "map" ? 'bg-[#D45995] text-white shadow-md' : 'text-[#7C6E76] hover:text-[#1E1B1D]'}`}
+                >
+                  Map
+                </button>
+              </div>
+            </header>
 
+            {viewMode === "list" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                {chapters.map((chapter, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedChapter(chapter)}
+                    className="flex flex-col p-8 bg-[#F1EEF4]/60 rounded-3xl border border-black/5 hover:border-[#D45995]/40 hover:bg-white hover:shadow-xl transition-all duration-300 text-left group cursor-pointer"
+                    aria-label={`Open ${chapter.university} chapter details`}
+                  >
+                    {/* Logo container */}
+                    <div className="w-full h-48 bg-white rounded-2xl flex items-center justify-center p-6 mb-6 shadow-sm group-hover:scale-[1.02] transition-transform">
+                      {chapter.logo ? (
+                        <img src={chapter.logo} alt={`${chapter.university} logo`} className="max-h-24 w-auto object-contain" />
+                      ) : (
+                        <span className="font-extrabold text-4xl text-[#D45995]">
+                          {chapter.city.substring(0, 2).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-[#D45995] uppercase tracking-wider">{chapter.city}</span>
+                    </div>
+                    <h3 className="font-bold text-xl text-[#1E1B1D] group-hover:text-[#D45995] transition-colors leading-snug">
+                      {chapter.university}
+                    </h3>
+                    <div className="mt-6 pt-4 border-t border-gray-200/80 flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[#1E1B1D]">
+                      <span>See More</span>
+                      <span className="group-hover:translate-x-1 transition-transform text-[#D45995] text-sm">→</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <StudentChapterMap chapters={chapters} onChapterClick={setSelectedChapter} />
+            )}
+          </section>
+        </div> {/* End shared gradient wrapper */}
         {/* Section 3: Partners — Infinite Marquee Strip */}
+        {/* Section 3: Partners */}
         <section
           id="partners"
           className="scroll-mt-28 px-2 md:px-4 py-10 md:py-14 overflow-hidden"
@@ -191,7 +212,7 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* Marquee wrapper with fade masks on edges */}
+          {/* Marquee wrapper */}
           <div
             className="relative"
             style={{
@@ -201,44 +222,44 @@ export default function Home() {
                 "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
             }}
           >
-            <div className="marquee-track py-5">
+            <div className="marquee-track py-6">
               {marqueeItems.map((partner, i) => {
                 const primaryLink = partner.links[0]?.url ?? "#";
 
                 return (
                   <a
-                    key={i}
+                    key={`${partner.name}-${i}`}
                     href={primaryLink}
                     target={primaryLink !== "#" ? "_blank" : undefined}
                     rel={primaryLink !== "#" ? "noopener noreferrer" : undefined}
-                    className="relative flex-shrink-0 mx-4 flex flex-col w-56 h-48 p-5 rounded-xl bg-white border border-black/5 shadow-[0_4px_14px_rgba(30,27,29,0.08)] hover:shadow-[0_8px_22px_rgba(30,27,29,0.14)] transition-shadow duration-300 cursor-pointer group overflow-hidden"
+                    className="relative flex-shrink-0 mx-4 w-72 h-64 md:w-80 md:h-72 rounded-2xl bg-white shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer group overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D45995]"
                   >
-                    {/* Logo area — description appears here on hover */}
-                    <div className="relative flex-1 min-h-0 w-full flex items-center justify-center">
-                      {partner.logo && (
-                        <img
-                          src={partner.logo}
-                          alt=""
-                          className="max-h-20 max-w-full object-contain transition-all duration-300 group-hover:blur-[3px] group-hover:opacity-20 group-focus-visible:blur-[3px] group-focus-visible:opacity-20"
-                        />
-                      )}
+                    {/* Full-card image */}
+                    {partner.logo ? (
+                      <img
+                        src={partner.logo}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus-visible:scale-105"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#D45995] to-[#8C3E73]" />
+                    )}
 
-                      {/* Always visible without a logo; revealed on hover otherwise */}
-                      <div
-                        className={`absolute inset-0 flex items-center justify-center px-1 transition-opacity duration-300 pointer-events-none ${partner.logo
-                          ? "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-                          : "opacity-100"
-                          }`}
-                      >
-                        <p className="text-[#4A4045] font-medium text-xs text-center leading-relaxed">
-                          {partner.about}
-                        </p>
-                      </div>
+                    {/* Gradient keeps the partner name readable */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+                    {/* About text revealed on hover or keyboard focus */}
+                    <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300" />
+
+                    <div className="absolute inset-x-0 top-0 bottom-20 flex items-center justify-center px-6 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300">
+                      <p className="text-white text-sm text-center leading-relaxed line-clamp-6">
+                        {partner.about}
+                      </p>
                     </div>
 
-                    {/* Partner name — stays visible below the logo */}
-                    <div className="w-full mt-4 pt-3 border-t border-black/5">
-                      <p className="text-[#1E1B1D] font-bold text-sm text-center leading-snug">
+                    {/* Name stays visible at the bottom */}
+                    <div className="absolute inset-x-0 bottom-0 p-6">
+                      <p className="text-white font-bold text-lg md:text-xl leading-snug drop-shadow-md">
                         {partner.name}
                       </p>
                     </div>
@@ -247,16 +268,23 @@ export default function Home() {
               })}
             </div>
           </div>
-          {/* Centred expand / collapse button */}
+
+          {/* Show / hide directory */}
           <div className="flex justify-center mt-8">
             <button
               type="button"
-              onClick={() => setShowAllPartners((previous) => !previous)}
+              onClick={() => {
+                if (!showAllPartners) {
+                  setPartnerPage(1);
+                }
+
+                setShowAllPartners((previous) => !previous);
+              }}
               aria-expanded={showAllPartners}
               aria-controls="all-partners"
               className="inline-flex items-center gap-3 border-b-2 border-[#D45995] px-1 py-2 text-sm font-bold text-[#1E1B1D] hover:text-[#D45995] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D45995]"
             >
-              {showAllPartners ? "Show fewer partners" : "Show all partners"}
+              {showAllPartners ? "Hide partners" : "Show all partners"}
 
               <span
                 aria-hidden="true"
@@ -268,18 +296,22 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Expanded partner directory — use the original, unduplicated data */}
-          <div id="all-partners" hidden={!showAllPartners}>
+          {/* Expanded directory — maximum four partners per page */}
+          <div
+            id="all-partners"
+            hidden={!showAllPartners}
+            className="scroll-mt-28"
+          >
             <div className="mt-12 divide-y divide-[#4A4045]/15">
-              {partnersBase.map((partner, index) => (
+              {visiblePartners.map((partner, index) => (
                 <article
-                  key={`${partner.name}-${index}`}
+                  key={`${partner.name}-${partnerPage}-${index}`}
                   className="grid grid-cols-1 md:grid-cols-[15rem_minmax(0,1fr)] gap-6 md:gap-12 py-10"
                 >
-                  {/* Left: logo, name and website / social links */}
+                  {/* Left: logo, name and links */}
                   <div className="flex flex-col items-start">
                     {partner.logo && (
-                      <div className="w-full max-w-[15rem] h-28 flex items-center justify-start mb-5">
+                      <div className="w-full max-w-[15rem] h-36 flex items-center justify-start mb-5">
                         <img
                           src={partner.logo}
                           alt={`${partner.name} logo`}
@@ -312,7 +344,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Right: about the partner */}
+                  {/* Right: description */}
                   <div className="md:pt-2 min-w-0">
                     <p className="text-base md:text-lg leading-relaxed text-[#4A4045] whitespace-pre-line">
                       {partner.about}
@@ -321,6 +353,64 @@ export default function Home() {
                 </article>
               ))}
             </div>
+
+            {/* Pagination */}
+            {totalPartnerPages > 1 && (
+              <nav
+                aria-label="Partner directory pages"
+                className="flex flex-wrap items-center justify-center gap-3 mt-8"
+              >
+                <button
+                  type="button"
+                  onClick={() => changePartnerPage(partnerPage - 1)}
+                  disabled={partnerPage === 1}
+                  className="px-4 py-2 text-sm font-semibold text-[#4A4045] hover:text-[#A82F6B] disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  ← Previous
+                </button>
+
+                {Array.from({ length: totalPartnerPages }, (_, index) => {
+                  const page = index + 1;
+                  const isActive = partnerPage === page;
+
+                  return (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => changePartnerPage(page)}
+                      aria-label={`Go to partner page ${page}`}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`w-10 h-10 rounded-lg text-sm font-bold transition-colors cursor-pointer ${isActive
+                        ? "bg-[#D45995] text-white"
+                        : "text-[#4A4045] hover:bg-[#D45995]/10"
+                        }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  onClick={() => changePartnerPage(partnerPage + 1)}
+                  disabled={partnerPage === totalPartnerPages}
+                  className="px-4 py-2 text-sm font-semibold text-[#4A4045] hover:text-[#A82F6B] disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  Next →
+                </button>
+              </nav>
+            )}
+
+            {partnersBase.length > 0 && (
+              <p
+                role="status"
+                className="text-center text-sm text-[#7C6E76] mt-5"
+              >
+                Showing {(partnerPage - 1) * partnersPerPage + 1}–
+                {Math.min(partnerPage * partnersPerPage, partnersBase.length)} of{" "}
+                {partnersBase.length} partners
+              </p>
+            )}
           </div>
         </section>
         {/* Section 4: Contact — full width, one row */}
@@ -340,7 +430,7 @@ export default function Home() {
             <div className="md:w-1/3 flex flex-col gap-4">
 
               <a
-                href="https://www.linkedin.com/company/womenshealthunion/"
+                href="https://www.linkedin.com/company/women’s-health-union/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded-2xl bg-[#F1EEF4]/60 border border-black/5 hover:border-[#D45995]/40 hover:bg-white hover:shadow-md transition-all text-[#1E1B1D] group"
@@ -388,7 +478,7 @@ export default function Home() {
                     <label className="text-xs font-bold uppercase tracking-wider text-[#1E1B1D]">Your Email</label>
                     <input
                       type="email"
-                      placeholder="you@email.com"
+                      placeholder="your@email.com"
                       className="w-full px-5 py-3 rounded-xl bg-[#F1EEF4]/60 border border-black/10 outline-none font-medium text-sm text-[#1E1B1D] placeholder-[#A6979F] focus:border-[#D45995] focus:bg-white focus:ring-2 focus:ring-[#D45995]/20 transition-all"
                     />
                   </div>
