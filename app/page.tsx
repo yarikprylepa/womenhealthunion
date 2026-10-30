@@ -11,19 +11,13 @@ const chapters = [
   {
     university: "Queen Mary University of London", city: "London", active: true, logo: "/logos/qmullogo.png", lat: 51.5241, lng: -0.0404,
     committee: [
-      { role: "President", name: "Hanling Zhang", course: "BSc Biomedical Sciences", email: "hanling.zhang@se26.qmul.ac.uk" },
-      { role: "Vice-President", name: "Priya Sharma", course: "BSc Global Public Health", email: "psh891@qmul.ac.uk" },
-      { role: "Treasury", name: "Leila Nkosi", course: "BSc Economics", email: "lnk102@qmul.ac.uk" },
-      { role: "Social Outreach", name: "Sofia Marchetti", course: "BSc Psychology", email: "sma567@qmul.ac.uk" },
+      { role: "President", name: "Hanling Zhang", course: "Biomedical Engineering`", email: "hanling.zhang@se26.qmul.ac.uk" },
     ],
   },
   {
     university: "University of Sheffield", city: "Sheffield", active: true, logo: "/logos/sheflogo.png", lat: 53.3811, lng: -1.4701,
     committee: [
-      { role: "President", name: "Janvi Ranish", course: "BSc Biomedical Sciences", email: "jranish1@sheffield.ac.uk" },
-      { role: "Vice-President", name: "Aisha Yusuf", course: "BSc Nursing", email: "ay2841@sheffield.ac.uk" },
-      { role: "Treasury", name: "Caitlin Hughes", course: "BSc Human Biology", email: "ch4017@sheffield.ac.uk" },
-      { role: "Social Outreach", name: "Zara Patel", course: "BSc Health Psychology", email: "zp3920@sheffield.ac.uk" },
+      { role: "President", name: "Janvi Ranish", course: "Biomedical Engineering", email: "jranish1@sheffield.ac.uk" },
     ],
   },
 ];
